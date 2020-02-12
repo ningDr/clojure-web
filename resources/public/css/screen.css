@@ -1,0 +1,15 @@
+body {
+    color: #555;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 13px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.hell {
+    color: red;
+    font-weight: bolder;
+    @apply bg-red-700;
+}

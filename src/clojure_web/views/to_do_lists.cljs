@@ -1,5 +1,6 @@
 (ns clojure-web.views.to-do-lists
-  (:require [reagent.core :as r]))
+  (:require [clojure.string :as cstr]
+            [reagent.core :as r]))
 ;; http://reagent-project.github.io/
 
 (defonce todos (r/atom (sorted-map)))
@@ -27,8 +28,8 @@
 (defn todo-input [{:keys [title on-save on-stop]}]
   (let [val (r/atom title)
         stop #(do (reset! val "")
-                  (if on-stop (on-stop)))
-        save #(let [v (-> @val str clojure.string/trim)]
+                  (when on-stop (on-stop)))
+        save #(let [v (-> @val str cstr/trim)]
                 (if-not (empty? v) (on-save v))
                 (stop))]
     (fn [{:keys [id class placeholder]}]
@@ -47,7 +48,7 @@
 (defn todo-stats
   [{:keys [filt active done]}]
   (let [props-for (fn [name]
-                    {:class (if (= name @filt) "selected")
+                    {:class (when (= name @filt) "selected")
                      :on-click #(reset! filt name)})]
     [:div
      [:span#todo-count
@@ -63,8 +64,8 @@
 (defn todo-item []
   (let [editing (r/atom false)]
     (fn [{:keys [id done title]}]
-      [:li {:class (str (if done "completed ")
-                        (if @editing "editing "))}
+      [:li {:class (str (when done "completed ")
+                        (when @editing "editing "))}
        [:div.view
         [:input.toggle {:type "checkbox" :checked done
                         :on-change #(toggle id)}]
@@ -75,7 +76,7 @@
                      :on-save #(save id %)
                      :on-stop #(reset! editing false)}])])))
 
-(defn todo-app [props]
+(defn todo-app [_]
   (let [filt (r/atom :all)]
     (fn []
       (let [items (vals @todos)

@@ -88,13 +88,17 @@
 (defn vue-test [a b]
   (println  a "***vue test ***" b)
   {:a 12})
+
 ;; 使用defroutes来定义clojure-web.routes.home命名空间中的路由
 ;; 每个路由都代表着一个应用会响应的URI地址。
 ;; 路由的起始位置是HTTP请求的类型，如GET、POST
 ;; 然后是参数和主体部分
 (defroutes home-routes
-  (GET "/" [] (home))
-  (GET "/vue-test" [a b] (vue-test a b))
+  (GET "/" []
+    (home))
+  
+  (GET "/vue-test" [a b]
+    (vue-test a b))
   
   (POST "/cros-test" []
     (println "请求到了cros-test...")
@@ -104,12 +108,18 @@
     (println "请求到了parse-json...")
     (ok (parse-json request)))
   
-  (POST "/" [name message] 
+  (POST "/" [name message]
     (println "请求到了/...")
     (save-message name message))
-  (GET "/game" [char0 char1 board] (game/calculate-next char0 char1 board))
-  (POST "/echart-game" [char1 board] (game/echart-format board char1))
-  (GET "/echart-format-json" [char1 board] (game/echart-format-json board char1))
+  
+  (GET "/game" [char0 char1 board]
+    (game/calculate-next char0 char1 board))
+  
+  (POST "/echart-game" [char1 board]
+    (game/echart-format board char1))
+  
+  (GET "/echart-format-json" [char1 board]
+    (game/echart-format-json board char1))
   #_(POST "/echart-format-json" []
       :body [params {s/Keyword s/Any}]
       (ok (game/echart-format-json)))
@@ -121,5 +131,4 @@
     ;; compojure提供的解构功能
     (GET "/get2/:foo" [foo]
       (println "请求到了foo...")
-      (ok (str "接收到了foo：" foo))))
-  )
+      (ok (str "接收到了foo：" foo)))))

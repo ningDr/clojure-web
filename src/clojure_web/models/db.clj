@@ -1,8 +1,9 @@
 (ns clojure-web.models.db
   (:require [clojure.java.jdbc :as sql])
     ;;      导入java类需要使用:import
-  (:import java.sql.DriverManager
-           [java.util Date]))
+  (:import [java.util Date]
+   ;[java.sql.DriverManager]
+   ))
 
 ;; 创建数据库连接定义
 ;; 是一个简单的map，包含了JDBC驱动的类型、协议、以及SQLite数据库的文件名
@@ -29,15 +30,16 @@
 (defn read-guests
   "读取数据库记录"
   []
-  (sql/with-connection
-    db
+  (let [res nil]
+    (sql/with-connection
+      db
     ;; sql/with-query-results : 执行查询，并返回结果
-    (sql/with-query-results res
-      ["SELECT * FROM guestbook ORDER BY timestamp DESC"]
+      (sql/with-query-results res
+        ["SELECT * FROM guestbook ORDER BY timestamp DESC"]
       ;; 调用doall，因为res是惰性的，不会把所有结果都加载到内存中
       ;; 通过调用doall，我们强制对res进行了完全求值
       ;; 如果不这么做，一旦离开了函数的作用范围，我们的数据库连接就会关闭，在函数外就无法访问结果数据
-      (doall res))))
+        (doall res)))))
 
 (defn save-message
   "保存消息到数据库"
@@ -72,8 +74,9 @@
 (defn get-user
   "根据用户登录账号查询用户"
   [id]
-  (sql/with-connection
-    db
-    (sql/with-query-results
-      res ["SELECT * FROM users WHERE id = ?" id]
-      (first res))))
+  (let [res nil]
+    (sql/with-connection
+      db
+      (sql/with-query-results
+        res ["SELECT * FROM users WHERE id = ?" id]
+        (first res)))))

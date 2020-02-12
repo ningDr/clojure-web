@@ -1,4 +1,5 @@
-(ns clojure-web.services.case-when)
+(ns clojure-web.services.case-when
+  (:require [clojure.string :as cstr]))
 
 (def sql-list [{:a "a" :b "b" :c 1}
                {:a "a" :b "b" :c 2}
@@ -15,7 +16,7 @@
                                 (recur (rest c) (if (= (k (first c)) v) (inc i) i)))))
 
 (defn case-when [static-keys k new-ks dic-vs sql-list]
-  (let [grouped (vals (group-by #(hash (clojure.string/join (vals (select-keys % static-keys)))) sql-list))]
+  (let [grouped (vals (group-by #(hash (cstr/join (vals (select-keys % static-keys)))) sql-list))]
     (reduce
      (fn [m n]
        (conj m (reduce

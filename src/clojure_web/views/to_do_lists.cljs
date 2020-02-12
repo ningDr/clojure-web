@@ -1,4 +1,4 @@
-(ns guestbook.views.to-do-lists
+(ns clojure-web.views.to-do-lists
   (:require [reagent.core :as r]))
 ;; http://reagent-project.github.io/
 

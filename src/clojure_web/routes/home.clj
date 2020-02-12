@@ -1,14 +1,14 @@
-(ns guestbook.routes.home
+(ns clojure-web.routes.home
   (:require [compojure.core :refer [defroutes GET POST context]]
             [ring.util.http-response :refer [ok]]
             ; [schema.core :as schema]
-            [guestbook.views.layout :as layout]
+            [clojure-web.views.layout :as layout]
    ;;      引入hiccup库
             [hiccup.form :refer [form-to text-field text-area submit-button]]
-            [guestbook.models.db :as db]
+            [clojure-web.models.db :as db]
    ;;      添加会话管理器
             [noir.session :as session]
-            [guestbook.services.game-of-life :as game]
+            [clojure-web.services.game-of-life :as game]
             ;; json
             [cheshire.core :as cc-json])
   (:import [java.text SimpleDateFormat]))
@@ -38,8 +38,8 @@
   (println "启动repl/start后，自动打开浏览器，请求根路径...")
   (layout/common 
    [:div.hell
-    [:h1 "GuestBook111" " " (session/get :user)]]  ;; (session/get :user)获取会话中的用户ID；session只能在请求上下文时使用
-   [:p "Welcome to my guestbook "]
+    [:h1 "clojure-web111" " " (session/get :user)]]  ;; (session/get :user)获取会话中的用户ID；session只能在请求上下文时使用
+   [:p "Welcome to my clojure-web "]
    [:p error]
    ;; 调用show-guests函数，创建已有的消息列表
    (show-guests)
@@ -88,7 +88,7 @@
 (defn vue-test [a b]
   (println  a "***vue test ***" b)
   {:a 12})
-;; 使用defroutes来定义guestbook.routes.home命名空间中的路由
+;; 使用defroutes来定义clojure-web.routes.home命名空间中的路由
 ;; 每个路由都代表着一个应用会响应的URI地址。
 ;; 路由的起始位置是HTTP请求的类型，如GET、POST
 ;; 然后是参数和主体部分

@@ -1,4 +1,4 @@
-(ns guestbook.models.db
+(ns clojure-web.models.db
   (:require [clojure.java.jdbc :as sql])
     ;;      导入java类需要使用:import
   (:import java.sql.DriverManager

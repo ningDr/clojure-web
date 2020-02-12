@@ -1,4 +1,4 @@
-(ns guestbook.handler
+(ns clojure-web.handler
   (:require [compojure.core :refer [defroutes routes]]
             ; [ring.middleware.resource :refer [wrap-resource]]
             ; [ring.middleware.file-info :refer [wrap-file-info]]
@@ -7,11 +7,11 @@
             [hiccup.middleware :refer [wrap-base-url]]
             [compojure.handler :as handler]
             [compojure.route :as route]
-            [guestbook.routes.home :refer [home-routes]]
+            [clojure-web.routes.home :refer [home-routes]]
    ;;      添加SQLite数据库
-            [guestbook.models.db :as db]
+            [clojure-web.models.db :as db]
    ;;      添加注册页
-            [guestbook.routes.auth :refer [auth-routes]]
+            [clojure-web.routes.auth :refer [auth-routes]]
    ;;      添加会话管理器
             [noir.session :as noir-session]
    ;;      会话存储处理，代替Redis
@@ -21,13 +21,13 @@
   (:import [java.io File]))
 
 (defn init []
-  (println "guestbook is starting")
+  (println "clojure-web is starting")
   (if-not (.exists (File. "./db.sq3"))
     (db/create-guest-book-table)
     (println "db.sq3库已创建")))
 
 (defn destroy []
-  (println "guestbook is shutting down"))
+  (println "clojure-web is shutting down"))
 
 (defroutes app-routes
            (route/resources "/")

@@ -1,5 +1,5 @@
-(ns guestbook.repl
-  (:require [guestbook.handler :as handler]
+(ns clojure-web.repl
+  (:require [clojure-web.handler :as handler]
             [ring.server.standalone :as standalone]
             [ring.middleware.file :as file]
             [ring.middleware.file-info :as file-info]))

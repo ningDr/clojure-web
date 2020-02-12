@@ -1,4 +1,4 @@
-(ns guestbook.services.case-when)
+(ns clojure-web.services.case-when)
 
 (def sql-list [{:a "a" :b "b" :c 1}
                {:a "a" :b "b" :c 2}

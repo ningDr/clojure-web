@@ -1,4 +1,4 @@
-(ns guestbook.models.clojureCond)
+(ns clojure-web.models.clojureCond)
 (defn clojureCond
   "cond vs switch case "
   [arg]

@@ -1,4 +1,4 @@
-# guestbook
+# clojure-web
 
 FIXME
 

@@ -3,7 +3,7 @@
 (cemerick.pomegranate.aether/register-wagon-factory!
  "http" #(org.apache.maven.wagon.providers.http.HttpWagon.))
 
-(defproject guestbook "0.1.0-SNAPSHOT"
+(defproject clojure-web "0.1.0-SNAPSHOT"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :dependencies [[org.clojure/clojure "1.10.0"]
@@ -29,9 +29,9 @@
                  ;; css
                  [clj-commons/cljss "1.6.4"]]
   :plugins [[lein-ring "0.12.5"]]
-  :ring {:handler guestbook.handler/app
-         :init    guestbook.handler/init
-         :destroy guestbook.handler/destroy}
+  :ring {:handler clojure-web.handler/app
+         :init    clojure-web.handler/init
+         :destroy clojure-web.handler/destroy}
   :profiles
   {:uberjar    {:aot :all}
    :production {:ring {:open-browser? false

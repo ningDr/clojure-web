@@ -1,7 +1,7 @@
-(ns guestbook.routes.auth
+(ns clojure-web.routes.auth
   (:require [compojure.core :refer [defroutes GET POST]]
-            [guestbook.views.layout :as layout]
-            [guestbook.models.db :as db]
+            [clojure-web.views.layout :as layout]
+            [clojure-web.models.db :as db]
             [hiccup.form :refer [form-to label text-field password-field submit-button]]
    ;;      添加重定向
    ;;      Ring在ring.util.response命名空间中提供了重定向的功能

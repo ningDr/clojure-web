@@ -1,4 +1,4 @@
-(ns guestbook.services.game-of-life
+(ns clojure-web.services.game-of-life
   (:require [cheshire.core :as cc-json]))
 
 (defn transfer-board

@@ -1,12 +1,15 @@
-(ns clojure-web.services.game-of-life
-  (:require [cheshire.core :as cc-json]))
+(ns clojure-web.services.game-of-life)
 
 (defn transfer-board
   "doc: 获得一个board，转为01数字
   author: ning.dr@foxmail.com
   date: 2019/9/12 21:31"
   [char board]
-  (mapv #(mapv (fn [i] (if (= i char) 1 0)) (seq %)) board))
+  (println "---transfer-board---")
+  (println (mapv (fn [i]
+                   (if (= i char) 1 0)) 
+                 (seq (ffirst board))))
+  (mapv #(mapv (fn [i] (if (= i char) 1 0)) (seq (first %))) board))
 
 (defn get-live-cell
   "doc: 计算一个cell周围的存活细胞数，以直角坐标系定位
@@ -27,6 +30,8 @@
   author: ning.dr@foxmail.com
   date: 2019/9/12 21:45"
   [trans-board]
+  (println "---get-cell-map---")
+  (println trans-board)
   (let [len (count (first trans-board))]
     (for [x (range 1 (- len 1))]
       (for [y (range 1 (- len 1))]
@@ -38,6 +43,8 @@
   author: ning.dr@foxmail.com
   date: 2019/9/12 21:50"
   [cell-map]
+  (println "---get-next-board---")
+  (println "==============" cell-map)
   (let [len (+ 2 (count (first cell-map)))
         next-cell (mapv #(conj (reduce (fn [m n] (conj m (cond
                                                            (> 2 (:f n)) 0
@@ -45,9 +52,8 @@
                                                            (> 4 (:f n)) (:x n)
                                                            (> 3 (:f n)) 0
                                                            :else 0))) [0] %) 0) cell-map)]
-    (as-> (reduce #(conj %1 %2) [] (take len (repeat 0)))
-          $
-          (conj (reduce #(conj %1 %2) [$] next-cell) $))))
+    (as-> (reduce #(conj %1 %2) [] (take len (repeat 0))) $
+      (conj (reduce #(conj %1 %2) [$] next-cell) $))))
 
 (defn get-result
   "doc: 将计算结果，转为要求形式
@@ -71,27 +77,22 @@
   author: ning.dr@foxmail.com
   date: 2019/9/12 22:12"
   [board char1]
-  (println "board=" board ";\n type(board)= " (type board) "char1=" char1)
+  (println "---echart-format---")
+  (println "board=" board ";char1=" char1)
   (let [trans (transfer-board char1 board)
         cell-map (get-cell-map trans)
         next-board (get-next-board cell-map)
-        x-y-cell (for [x (range 0 5)]
-                   (for [y (range 0 5)]
+        _ (println "===" next-board)
+        index (-> (first next-board) count)
+        x-y-cell (for [x (range 0 index)]
+                   (for [y (range 0 index)]
                      (vector x y (nth (nth next-board x) y))))]
-    (cc-json/generate-string {:data (reduce #(concat %1 %2) [] x-y-cell)})))
+    {:data (reduce #(concat %1 %2) [] x-y-cell)}))
 
 (defn echart-format-json
   "doc: 得到echats形式的结果，格式 [[x y cell] [x y cell]]
   author: ning.dr@foxmail.com
   date: 2019/9/12 22:12"
   [board char1]
-  (println "**echart-format-json**" board char1)
-  (let [aa (cc-json/encode board)
-        bb ["  *  " " *  * "]
-        encode-bb (cc-json/encode bb)]
-    (println "cheshire.core解析字符串数组结果：" aa)
-    (println "类型为：" (type (cc-json/decode aa)))
-    (println "==============")
-    (println "bb编码：" encode-bb)
-    (println "bb编码后再解码：" (cc-json/decode encode-bb)))
-  #_(cc-json/encode (echart-format board char1)))
+  (println "---echart-format-json---" board char1)
+  (echart-format board char1))

@@ -21,7 +21,9 @@
                  [lib-noir "0.7.9"]
                  ;; JSON
                  [ring/ring-json "0.5.0"]
+                 [robertluo/ring-middleware-format "0.8.0"]
                  [cheshire "5.9.0"]
+                 [clj-json "0.5.3"]
                  ;; reagent
                  [reagent/reagent "0.8.1"]
                  ;; ajax

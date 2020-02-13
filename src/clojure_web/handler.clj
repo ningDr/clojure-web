@@ -17,7 +17,8 @@
    ;;      会话存储处理，代替Redis
             [ring.middleware.session.memory :refer [memory-store]]
             ;; json
-            [ring.middleware.json :refer [wrap-json-body wrap-json-response]]
+            [ring.middleware.json :refer [wrap-json-body
+                                          wrap-json-response]]
    ;;      添加验证组件
             [noir.validation :refer [wrap-noir-validation]])
   (:import [java.io File]))
@@ -36,17 +37,17 @@
            (route/not-found "Not Found"))
 
 (def app
-  (handler/api
-   (-> (routes auth-routes home-routes app-routes)
-       wrap-json-body
-       wrap-json-response
-       (handler/site)  ;; 用于生成Ring handler
-       (noir-session/wrap-noir-session
-        {:store (memory-store)})
-       (wrap-base-url)
+  (-> (routes auth-routes home-routes app-routes)
+      wrap-json-body
+      wrap-json-response ;; 封装返回数据为json
+      (handler/site)  ;; 用于生成Ring handler
+      (noir-session/wrap-noir-session
+       {:store (memory-store)})
+      (wrap-base-url)
       ;; 登录验证
-       (noir-session/wrap-noir-session
-        {:store (memory-store)})
-       (wrap-noir-validation)
-       (wrap-cors :access-control-allow-origin [#".*"]
-                  :access-control-allow-methods [:get :put :post :delete]))))
+      (noir-session/wrap-noir-session
+       {:store (memory-store)})
+      (wrap-noir-validation)
+      (wrap-cors :access-control-allow-origin [#".*"]
+                 :access-control-allow-methods [:get :post :delete])
+      handler/api))

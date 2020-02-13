@@ -1,5 +1,6 @@
 (ns clojure-web.routes.home
   (:require [compojure.core :refer [defroutes GET POST context]]
+            [clojure.set :as cset]
             [ring.util.http-response :refer [ok]]
             ; [schema.core :as schema]
             [clojure-web.views.layout :as layout]
@@ -77,16 +78,49 @@
   []
   (println "cros-test")
   (cc-json/generate-string {:a 1 :b 2 :c {:d 4 :e 5}})
-  #_{:a 1 :b 2 :c {:d 4 :e 5}})
+  {:a 1 :b 2 :c {:d 4 :e 6}})
+;; ================================================================================
+(def ^{:doc "HTTP token: 1*<any CHAR except CTLs or tspecials>. See RFC2068"
+       :added "1.3"}
+  re-token
+  #"[!#$%&'*\-+.0-9A-Z\^_`a-z\|~]+")
+
+(def ^{:doc "HTTP quoted-string: <\"> *<any TEXT except \"> <\">. See RFC2068."
+       :added "1.3"}
+  re-quoted
+  #"\"(\\\"|[^\"])*\"")
+
+(def ^{:doc "HTTP value: token | quoted-string. See RFC2109"
+       :added "1.3"}
+  re-value
+  (str re-token "|" re-quoted))
+
+(def ^:private charset-pattern
+  (re-pattern (str ";(?:.*\\s)?(?i:charset)=(" re-value ")\\s*(?:;|$)")))
+
+(defn character-encoding
+  "Return the character encoding for the request, or nil if it is not set."
+  {:added "1.3"}
+  [request]
+  (if-let [type (get-in request [:headers "content-type"])]
+    (second (re-find charset-pattern type))))
 
 (defn parse-json
-  [req]
-  (let [body (:body req)
-        _ (println "-----------" (type body))]
-    (str "hello cross!")))
+  [request]
+  (let [_ (println request)
+        body (:body request)
+        body (cset/rename-keys
+              body
+              (reduce #(merge %1 {%2 (keyword %2)})
+                      {} (keys body)))
+        board (:board body)
+        char1 \*
+        next-board (game/echart-format-json board char1)]
+    (println next-board)
+    next-board))
 
 (defn vue-test [a b]
-  (println  a "***vue test ***" b)
+  (println  a "***vue test***" b)
   {:a 12})
 
 ;; 使用defroutes来定义clojure-web.routes.home命名空间中的路由
